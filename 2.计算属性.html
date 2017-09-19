@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>为todolist增加统计总数</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <style>
+    .completed {
+      color: green;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="panel panel-default ">
+      <div class="panel-heading ">
+        <h3 class="panel-title ">{{message}} {{todoCount}}</h3>
+      </div>
+      <div class="panel-body ">
+        <h3>to do list</h3>
+        <ul class="list-group">
+          <li class="list-group-item" v-bind:class="{completed:v.completed}" v-for="(v,index) in todos">{{v.title}}
+            <button @click="toggleState(v)" class="btn btn-xs col-xs-offset-1 pull-right" :class="[v.completed?'btn-success':'btn-danger']">{{v.completed?'未完成':'已完成'}}</button>
+            <i @click="deleteToDo(index)" class=" glyphicon glyphicon-remove-circle pull-right "></i>
+          </li>
+        </ul>
+        <form v-on:submit.prevent="addNew(newToDo) ">
+          <div class="form-group ">
+            <input type="text " class="form-control " id=" " placeholder=" " v-model="newToDo.title ">
+          </div>
+          <div class="form-group ">
+            <button type="submit " class="btn btn-success ">add Todos</button>
+          </div>
+        </form>
+
+      </div>
+      <div class="panel-footer ">
+
+      </div>
+    </div>
+  </div>
+  <script src="js/vue.min.js "></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'hello world',
+        todos: [{
+          id: 1,
+          title: 'learn vue',
+          completed: true
+        }, {
+          id: 2,
+          title: 'learn wexin',
+          completed: false
+        }],
+        newToDo: {
+          id: null,
+          title: '',
+          completed: false
+        },
+      },
+      methods: {
+        addNew: function(newToDo) {
+          this.todos.push(newToDo);
+          this.newToDo = {
+            id: null,
+            title: ''
+          }
+        },
+        deleteToDo(index) {
+          this.todos.splice(index, 1);
+        },
+        toggleState(v) {
+          v.completed = !v.completed;
+        }
+      },
+      computed: {
+        //经过处理之后再显示到页面
+        todoCount() {
+          return this.todos.length;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
